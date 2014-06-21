@@ -29,7 +29,12 @@ class RGBColorField(CharField):
         return super(RGBColorField, self).formfield(**kwargs)
 
     def south_field_triple(self):
-        return 'colorful.fields.RGBColorField', (), {}
+        "Returns a suitable description of this field for South."
+        # We'll just introspect the _actual_ CharField.
+        from south.modelsinspector import introspector
+        field_class = "django.db.models.fields.TextField"
+        args, kwargs = introspector(self)
+        return (field_class, args, kwargs)
 
     def deconstruct(self):
         name, path, args, kwargs = super(RGBColorField, self).deconstruct()
